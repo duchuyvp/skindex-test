@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "chat-service"
+version = "0.1.0"
+description = ""
+authors = [
+    "Luna Lovegood <duchuyvp123@gmail.com>",
+]
+readme = "README.md"
+packages = [{ include = "chat_service" }]
+
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.111.1"
+sqlalchemy = "^2.0.31"
+icecream = "^2.1.3"
+pre-commit = "^3.8.0"
+aioredis = "^2.0.1"
+loguru = "^0.7.2"
+psycopg2 = "^2.9.9"
+pytest = "^8.3.2"
