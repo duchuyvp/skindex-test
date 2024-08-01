@@ -49,7 +49,7 @@ jobs:
           password: ${{ secrets.REGISTRY_PASSWORD }}
           registry: ${{ secrets.REGISTRY_SERVER }}
       - run: |
-          IMAGE="${{ secrets.REGISTRY_SERVER }}/docker/chat-service:${{ github.ref_name }}.${{ github.sha }}"
+          IMAGE="${{ secrets.REGISTRY_SERVER }}/docker/chat-service:latest"
           docker build \
             --tag $IMAGE \
             --file Dockerfile .
