@@ -1,0 +1,25 @@
+C4Container
+    title Container Diagram for Chat Service API
+
+    Person(user, "User", "A user of the chat service")
+
+    ContainerDb(database, "Database", "PostgreSQL", "Stores chat data")
+
+    System_Boundary(c1, "Application") {
+        Container(fe_app, "Front End Component", "Front End Page", "Provides chat interface")
+        System_Boundary(c2, "API Application") {
+            Container(core, "Core library", "Core Lib", "Contain structs and functions")
+            Container(adapter, "Adapter Component", "Adapter Component", "Component could be easily replaced")
+            Container(domain, "Domain Component", "Domain Component", "Contains Domain models")
+            Container(service, "Service Component", "Service Component", "Handle service logic")
+            Container(entrypoint, "Entrypoint Component", "Entrypoint Component", "Provides entrypoint for the application")
+        }
+    }
+
+    Rel(user, fe_app, "Uses", "Browser")
+    Rel(fe_app, entrypoint, "Make api call", "HTTP and WebSockets")
+    Rel(entrypoint, service, "Uses", "Function Call")
+    Rel(service, domain, "Uses", "Function Call")
+    Rel(domain, adapter, "Uses", "Function Call")
+    Rel(domain, core, "Uses", "Function Call")
+    Rel(adapter, database, "Reads from and writes to", "SQL")

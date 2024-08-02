@@ -1,0 +1,22 @@
+
+C4Component
+    title Component Diagram for Chat Service API
+
+    Container_Boundary(c1, "Web Application") {
+        Component(router, "Router", "FastAPI", "Routes HTTP requests")
+        Component(controller, "Controller", "FastAPI", "Handles HTTP requests and responses")
+    }
+
+    Container_Boundary(c2, "Chat Service") {
+        Component(service, "Service", "Python", "Handles business logic")
+        Component(repository, "Repository", "SQLAlchemy", "Handles database operations")
+    }
+
+    ContainerDb(database, "Database", "PostgreSQL", "Stores chat data")
+
+    Rel(user, router, "Uses", "HTTP")
+    Rel(admin, router, "Administers", "HTTP")
+    Rel(router, controller, "Routes to", "HTTP")
+    Rel(controller, service, "Invokes", "Function Call")
+    Rel(service, repository, "Uses", "Function Call")
+    Rel(repository, database, "Reads from and writes to", "SQL")

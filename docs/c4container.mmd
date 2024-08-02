@@ -1,0 +1,20 @@
+C4Container
+    title Container Diagram for Chat Service API
+
+    Person(user, "User", "A user of the chat service")
+
+    ContainerDb(database, "Database", "PostgreSQL", "Stores chat data")
+
+    System_Boundary(c1, "Application") {
+        System_Boundary(c2, "Front End") {
+            Container(web_app, "Web Application", "Front End Page", "Provides chat interface")
+            Container(mobile_app, "Mobile Application", "Front End Page", "Provides chat interface")
+        }
+        Container(api_service, "API Application", "FastAPI", "Handles chat operations")
+    }
+
+    Rel(user, web_app, "Uses", "Browser")
+    Rel(user, mobile_app, "Uses", "Phone")
+    Rel(web_app, api_service, "Make api call", "HTTP and WebSockets")
+    Rel(mobile_app, api_service, "Make api call", "HTTP and WebSockets")
+    Rel(api_service, database, "Reads from and writes to", "SQL")

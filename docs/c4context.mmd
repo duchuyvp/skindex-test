@@ -1,0 +1,12 @@
+
+C4Context
+    title System Context Diagram for Chat Service API
+
+    Person(user, "User (Client)", "A user of the chat service")
+    Container(chat_service, "Application", "", "Handles HTTP requests and responses")
+
+    ContainerDb(database, "Database", "PostgreSQL", "Stores chat data")
+
+
+    Rel(user, chat_service, "Use Browser")
+    Rel(chat_service, database, "Reads from and writes to", "SQL")

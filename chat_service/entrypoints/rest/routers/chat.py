@@ -10,6 +10,6 @@ bus = bootstrap()
 
 
 @router.get("/chats")
-async def get_chats(room_id: str, password: str) -> list[schemas.MessageResponse]:
+async def get_chats(room_id: str, password: str = "") -> list[schemas.MessageResponse]:
     history = views.get_chat_history(room_id, password, bus.uow)
     return history
