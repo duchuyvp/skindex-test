@@ -90,8 +90,8 @@ async def health_check():
             return;
         }}
         ws = new WebSocket(`{ws_url}/ws/${{roomId}}?password=${{roomPassword}}`);
-        ws.onopen = function() {{
-            console.log("Connected to WebSocket");
+        ws.onopen = function(event) {{
+            console.log('WebSocket connection established:', event);
             fetchChatHistory();
         }};
         ws.onmessage = function(event) {{
@@ -101,14 +101,16 @@ async def health_check():
             messagesDiv.innerHTML += `<div>${{data.username}}: ${{data.message}}</div>`;
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }};
-        ws.onclose = function() {{
-            
+        ws.onclose = function(event) {{
             console.log("Disconnected from WebSocket");
+            if (event.code === 1000) {{
+                alert(`Connection closed: ${{event.reason}}`);
+            }} else {{
+                console.error('Unexpected closure:', event);
+            }}
         }};
         ws.onerror = function(error) {{
-            if (event.code === 401) {{
-                alert("Wrong password. Please try again.");
-            }}
+            console.log(error);
             console.error("WebSocket error:", error);
         }};
     }}
