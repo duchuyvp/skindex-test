@@ -1,43 +1,44 @@
 flowchart TB
     %% Title
-    title["Container Diagram for Chat Service API"]
-
+    title["Architecture Diagram for Chat Service API"]
+    
     %% Define styles
     classDef person fill:#ffdddd,stroke:#333,stroke-width:2px;
     classDef database fill:#ddeeff,stroke:#333,stroke-width:2px,stroke-dasharray: 5;
     classDef container fill:#ddffdd,stroke:#333,stroke-width:2px;
     classDef boundary stroke:#999,stroke-width:2px,stroke-dasharray: 3;
-
+    
     %% Define elements
     user["User\n\nA user of the chat service"]:::person
     database["Database\n\nPostgreSQL\nStores chat data"]:::database
-
+    
     subgraph Application_Boundary["Application"]
-        fe_app["Front End Component\n\nFront End Page\nProvides chat interface"]:::container
-
-        subgraph API_Application["API Application"]
-            core["Core Library\n\nCore Lib\nContains structs and functions"]:::container
-            adapter["Adapter Component\n\nAdapter Component\nComponent could be easily replaced"]:::container
-            domain["Domain Component\n\nDomain Component\nContains Domain models"]:::container
-            service["Service Component\n\nService Component\nHandles service logic"]:::container
-            entrypoint["Entrypoint Component\n\nEntrypoint Component\nProvides entrypoint for the application"]:::container
+        subgraph Front_End["Front End"]
+            web_app["Web Application\n\nFront End Page\nProvides chat interface"]:::container
+            mobile_app["Mobile Application\n\nFront End Page\nProvides chat interface"]:::container
+        end
+        api_service["API Application\n\nFastAPI\nHandles chat operations"]:::container
+        subgraph Core["Core"]
+            core_session["Session\n\nManages database sessions"]:::container
+            core_factory["Factory\n\nCreates core components"]:::container
+            core_repository["Repository\n\nHandles database operations"]:::container
+        end
+        subgraph Chat_Service["Chat Service"]
+            chat_controller["Controller\n\nHandles HTTP requests and responses"]:::container
+            chat_service["Service\n\nHandles business logic"]:::container
+            chat_repository["Repository\n\nHandles database operations"]:::container
         end
     end
-
+    
     %% Define relationships
-    user -->|Browser| fe_app
-    fe_app -->|HTTP & WebSockets| entrypoint
-    entrypoint -->|Function Call| service
-    service -->|Function Call| domain
-    domain -->|Function Call| adapter
-    domain -->|Function Call| core
-    adapter -->|SQL| database
-
-    %% Link styles
-    linkStyle 0 stroke:#333,stroke-width:2px;
-    linkStyle 1 stroke:#0066cc,stroke-width:2px;
-    linkStyle 2 stroke:#ffcc00,stroke-width:2px;
-    linkStyle 3 stroke:#ffcc00,stroke-width:2px;
-    linkStyle 4 stroke:#ffcc00,stroke-width:2px;
-    linkStyle 5 stroke:#ffcc00,stroke-width:2px;
-    linkStyle 6 stroke:#339933,stroke-width:2px;
+    user -->|Browser| web_app
+    user -->|Phone| mobile_app
+    web_app -->|HTTP| api_service
+    mobile_app -->|HTTP| api_service
+    api_service -->|Routes to| chat_controller
+    chat_controller -->|Invokes| chat_service
+    chat_service -->|Uses| chat_repository
+    chat_repository -->|Reads from and writes to| database
+    chat_service -->|Uses| core_session
+    chat_service -->|Uses| core_factory
+    chat_service -->|Uses| core_repository
