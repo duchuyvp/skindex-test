@@ -140,7 +140,7 @@ async def health_check():
 
     function createRoom() {{
         const createRoomPassword = document.getElementById('createRoomPassword').value;
-        fetch('http://localhost:8000/rooms', {{
+        fetch('{http_url}/rooms', {{
             method: 'POST',
             headers: {{
                 'Content-Type': 'application/json'
