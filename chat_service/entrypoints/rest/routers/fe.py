@@ -88,6 +88,18 @@ async def health_check():
     </style>
 </head>
 <body>
+<div id="instructions">
+    <h1>WebSocket Chat</h1>
+
+    <h2>Instructions</h2>
+    <ol>
+        <li>Click "Create room" to create a new chat room, you can provide a password if you want.</li>
+        <li>Copy the room ID and share it along with the password (if any) with your friends.</li>
+        <li>Enter the room ID and password (if any) and click "Connect" to join the chat room.</li>
+        <li>Start chatting!</li>
+    </ol>
+</div>
+
 <div id="chat">
     <input type="text" id="createRoomPassword" placeholder="(Optional) Password to Create Room" />
     <button onclick="createRoom()">Create Room</button>
