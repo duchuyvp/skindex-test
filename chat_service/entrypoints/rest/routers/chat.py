@@ -20,7 +20,9 @@ async def get_chats(room_id: str) -> list[schemas.MessageResponse]:
 
 @router.get("/")
 async def health_check():
-    host = os.environ.get("HOST_URL", "localhost:8000")
+    http_url = os.getenv("HTTP_URL", "http://localhost:8000")
+    ws_url = os.getenv("WS_URL", "ws://localhost:8000")
+
     return fastapi.responses.HTMLResponse(
         f"""
 <!DOCTYPE html>
@@ -95,7 +97,7 @@ async def health_check():
             return;
         }}
 
-        ws = new WebSocket(`ws://{host}/ws/${{roomId}}`);
+        ws = new WebSocket(`{ws_url}/ws/${{roomId}}`);
 
         ws.onopen = function() {{
             console.log("Connected to WebSocket");
@@ -130,7 +132,7 @@ async def health_check():
 
     async function fetchChatHistory() {{
         try {{
-            const response = await fetch(`http://{host}/chats?room_id=${{roomId}}`);
+            const response = await fetch(`{http_url}/chats?room_id=${{roomId}}`);
             const messages = await response.json();
             const messagesDiv = document.getElementById('messages');
             messagesDiv.innerHTML = messages.map(msg => `<div>${{msg.username}}: ${{msg.message}}</div>`).join('');
