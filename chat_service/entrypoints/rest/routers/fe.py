@@ -24,7 +24,7 @@ async def health_check():
     <title>WebSocket Chat</title>
     <style>
         body {{
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
@@ -32,36 +32,58 @@ async def health_check():
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background-color: #f5f5f5;
+            background-color: #e9ecef;
         }}
         #chat {{
             width: 90%;
             max-width: 600px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            box-sizing: border-box;
         }}
         #messages {{
             height: 300px;
             overflow-y: auto;
             border: 1px solid #ddd;
+            border-radius: 8px;
             padding: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
+            background-color: #f8f9fa;
         }}
         #messageInput {{
-            width: calc(100% - 60px);
+            width: calc(100% - 70px);
             padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-right: 10px;
         }}
         #roomInput, #roomPassword, #createRoomPassword {{
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             width: calc(100% - 22px);
             padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
         }}
         button {{
             cursor: pointer;
-            width: 50px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }}
+        button:hover {{
+            background-color: #0056b3;
+        }}
+        #sendButton {{
             padding: 10px;
+        }}
+        .form-group {{
+            display: flex;
+            align-items: center;
         }}
     </style>
 </head>
@@ -73,8 +95,10 @@ async def health_check():
     <input type="text" id="roomPassword" placeholder="Enter Room Password" />
     <button onclick="connectWebSocket()">Connect</button>
     <div id="messages"></div>
-    <input type="text" id="messageInput" placeholder="Enter Message" />
-    <button id="sendButton" onclick="sendMessage()">Send</button>
+    <div class="form-group">
+        <input type="text" id="messageInput" placeholder="Enter Message" />
+        <button id="sendButton" onclick="sendMessage()">Send</button>
+    </div>
 </div>
 
 <script>
@@ -98,7 +122,7 @@ async def health_check():
             console.log(event.data);
             const messagesDiv = document.getElementById('messages');
             const data = JSON.parse(event.data);
-            messagesDiv.innerHTML += `<div>${{data.username}}: ${{data.message}}</div>`;
+            messagesDiv.innerHTML += `<div><strong>${{data.username}}</strong>: ${{data.message}}</div>`;
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }};
         ws.onclose = function(event) {{
@@ -131,7 +155,7 @@ async def health_check():
                 const messagesDiv = document.getElementById('messages');
                 messagesDiv.innerHTML = '';
                 data.forEach(message => {{
-                    messagesDiv.innerHTML += `<div>${{message.username}}: ${{message.message}}</div>`;
+                    messagesDiv.innerHTML += `<div><strong>${{message.username}}</strong>: ${{message.message}}</div>`;
                 }});
                 messagesDiv.scrollTop = messagesDiv.scrollHeight;
             }})
