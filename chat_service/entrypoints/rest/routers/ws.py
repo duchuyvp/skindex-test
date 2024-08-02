@@ -11,7 +11,8 @@ bus = bootstrap()
 
 
 @router.websocket("/ws/{room_id}")
-async def websocket_endpoint(websocket: fastapi.WebSocket, room_id: str):
+async def websocket_endpoint(websocket: fastapi.WebSocket, room_id: str, password: str):
+    views.find_room(room_id, password, bus.uow)
     await manager.connect(websocket, room_id)
     try:
         while True:

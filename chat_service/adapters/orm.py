@@ -3,6 +3,7 @@ from typing import Any
 
 import core
 import sqlalchemy as sa
+from sqlalchemy import orm
 import utils
 from core.adapters import create_component_factory, sqlalchemy_adapter
 from core.orm import map_once
@@ -60,7 +61,30 @@ def start_mappers() -> None:
         Column("username", String(64)),
     )
 
-    registry.map_imperatively(models.Message, message_table)
+    room_table = Table(
+        "rooms",
+        registry.metadata,
+        Column("id", String(64), primary_key=True),
+        Column("created_time", DateTime),
+        Column("updated_time", DateTime),
+        Column("message_id", String(64)),
+        Column("password", String(64)),
+    )
+
+    message_mapper = registry.map_imperatively(models.Message, message_table)
+    room_mapper = registry.map_imperatively(models.Room, room_table)
+
+    room_mapper.add_properties(
+        {
+            "messages": orm.relationship(
+                argument=message_mapper,
+                primaryjoin=(room_table.c.id == orm.foreign(message_table.c.room_id)),
+                backref="room",
+                collection_class=list,
+                lazy="select",
+            )
+        }
+    )
 
     setup_model_on_callbacks()
 

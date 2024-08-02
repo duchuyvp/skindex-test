@@ -10,3 +10,8 @@ class MessageResponse(pydantic.BaseModel):
     created_time: datetime
     updated_time: datetime
     id: str
+
+
+class RoomResponse(pydantic.BaseModel):
+    created_time: datetime
+    id: str

@@ -1,5 +1,7 @@
 from fastapi import WebSocket
 
+from chat_service.services import views
+
 
 class ConnectionManager:
     def __init__(self):

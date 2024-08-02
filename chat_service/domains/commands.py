@@ -10,3 +10,11 @@ class SendMessage(Command):
     message: str
     image: str | None
     username: str
+
+
+class CreateRoom(Command):
+    """
+    This class represents a command to create a room.
+    """
+
+    password: str

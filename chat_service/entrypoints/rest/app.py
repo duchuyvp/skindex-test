@@ -21,6 +21,8 @@ app.add_middleware(
 )
 app.include_router(routers.chat.router)
 app.include_router(routers.ws.router)
+app.include_router(routers.room.router)
+app.include_router(routers.fe.router)
 
 
 def run():
