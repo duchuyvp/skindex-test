@@ -2,4 +2,4 @@ database:
   type: postgres
   framework: sqlalchemy
   connection:
-    url: postgresql://user:password@localhost:5432/chat
+    url: postgresql://user:password@postgres:5432/chat

@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:13
+    ports: ["5432:5432"]
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: chat
+
+  chat-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    environment:
+      CONFIG_PATH: /etc/config
+    volumes:
+      - ./.configs:/etc/config
+      - ./.configs:/chat-service/.configs
