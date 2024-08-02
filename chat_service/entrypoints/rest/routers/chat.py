@@ -6,7 +6,8 @@ from chat_service.bootstrap import bootstrap
 from chat_service.services import views
 from chat_service.entrypoints import schemas
 
-config = utils.get_config()
+config_path = utils.get_config_path()
+config = utils.load_config(config_path)
 router = fastapi.APIRouter()
 bus = bootstrap()
 
@@ -15,11 +16,6 @@ bus = bootstrap()
 async def get_chats(room_id: str) -> list[schemas.MessageResponse]:
     history = views.get_chat_history(room_id, bus.uow)
     return history
-
-
-@router.get("/app12423413241324")
-async def read_main():
-    return {"message": "Hello World"}
 
 
 @router.get("/")

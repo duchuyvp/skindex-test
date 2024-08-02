@@ -10,7 +10,8 @@ from core.dependency_injection import inject_dependencies
 from chat_service.adapters.orm import start_mappers
 from chat_service.services import command, event
 
-config = utils.get_config()
+config_path = utils.get_config_path()
+config = utils.load_config(config_path)
 
 
 def bootstrap(

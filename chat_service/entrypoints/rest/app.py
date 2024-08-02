@@ -9,7 +9,8 @@ from chat_service.entrypoints.rest import routers
 
 app = fastapi.FastAPI(root_path="/chat-service")
 
-config = utils.get_config()
+config_path = utils.get_config_path()
+config = utils.load_config(config_path)
 
 app.add_middleware(
     cors.CORSMiddleware,

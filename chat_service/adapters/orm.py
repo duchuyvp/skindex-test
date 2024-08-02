@@ -21,7 +21,8 @@ from sqlalchemy import (
 from chat_service.domains import models
 from chat_service.entrypoints import schemas
 
-config = utils.get_config()
+config_path = utils.get_config_path()
+config = utils.load_config(config_path)
 logger = logging.getLogger(__name__)
 
 
