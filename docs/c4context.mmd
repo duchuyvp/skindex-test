@@ -1,12 +1,21 @@
+flowchart TB
+    %% Title
+    title["System Context Diagram for Chat Service API"]
 
-C4Context
-    title System Context Diagram for Chat Service API
+    %% Define styles
+    classDef person fill:#ffdddd,stroke:#333,stroke-width:2px;
+    classDef system fill:#ddffdd,stroke:#333,stroke-width:2px;
+    classDef database fill:#ddeeff,stroke:#333,stroke-width:2px,stroke-dasharray: 5;
 
-    Person(user, "User (Client)", "A user of the chat service")
-    Container(chat_service, "Application", "", "Handles HTTP requests and responses")
+    %% Define elements
+    user["User (Client)\n\nA user of the chat service"]:::person
+    chat_service["Chat Service API\n\nHandles HTTP requests and responses"]:::system
+    database["Database\n\nPostgreSQL\nStores chat data"]:::database
 
-    ContainerDb(database, "Database", "PostgreSQL", "Stores chat data")
+    %% Define relationships
+    user -->|Uses Browser| chat_service
+    chat_service -->|Reads from and writes to\nSQL| database
 
-
-    Rel(user, chat_service, "Use Browser")
-    Rel(chat_service, database, "Reads from and writes to", "SQL")
+    %% Link styles
+    linkStyle 0 stroke:#333,stroke-width:2px;
+    linkStyle 1 stroke:#339933,stroke-width:2px;

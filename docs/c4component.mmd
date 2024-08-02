@@ -1,25 +1,43 @@
-C4Container
-    title Container Diagram for Chat Service API
+flowchart TB
+    %% Title
+    title["Container Diagram for Chat Service API"]
 
-    Person(user, "User", "A user of the chat service")
+    %% Define styles
+    classDef person fill:#ffdddd,stroke:#333,stroke-width:2px;
+    classDef database fill:#ddeeff,stroke:#333,stroke-width:2px,stroke-dasharray: 5;
+    classDef container fill:#ddffdd,stroke:#333,stroke-width:2px;
+    classDef boundary stroke:#999,stroke-width:2px,stroke-dasharray: 3;
 
-    ContainerDb(database, "Database", "PostgreSQL", "Stores chat data")
+    %% Define elements
+    user["User\n\nA user of the chat service"]:::person
+    database["Database\n\nPostgreSQL\nStores chat data"]:::database
 
-    System_Boundary(c1, "Application") {
-        Container(fe_app, "Front End Component", "Front End Page", "Provides chat interface")
-        System_Boundary(c2, "API Application") {
-            Container(core, "Core library", "Core Lib", "Contain structs and functions")
-            Container(adapter, "Adapter Component", "Adapter Component", "Component could be easily replaced")
-            Container(domain, "Domain Component", "Domain Component", "Contains Domain models")
-            Container(service, "Service Component", "Service Component", "Handle service logic")
-            Container(entrypoint, "Entrypoint Component", "Entrypoint Component", "Provides entrypoint for the application")
-        }
-    }
+    subgraph Application_Boundary["Application"]
+        fe_app["Front End Component\n\nFront End Page\nProvides chat interface"]:::container
 
-    Rel(user, fe_app, "Uses", "Browser")
-    Rel(fe_app, entrypoint, "Make api call", "HTTP and WebSockets")
-    Rel(entrypoint, service, "Uses", "Function Call")
-    Rel(service, domain, "Uses", "Function Call")
-    Rel(domain, adapter, "Uses", "Function Call")
-    Rel(domain, core, "Uses", "Function Call")
-    Rel(adapter, database, "Reads from and writes to", "SQL")
+        subgraph API_Application["API Application"]
+            core["Core Library\n\nCore Lib\nContains structs and functions"]:::container
+            adapter["Adapter Component\n\nAdapter Component\nComponent could be easily replaced"]:::container
+            domain["Domain Component\n\nDomain Component\nContains Domain models"]:::container
+            service["Service Component\n\nService Component\nHandles service logic"]:::container
+            entrypoint["Entrypoint Component\n\nEntrypoint Component\nProvides entrypoint for the application"]:::container
+        end
+    end
+
+    %% Define relationships
+    user -->|Browser| fe_app
+    fe_app -->|HTTP & WebSockets| entrypoint
+    entrypoint -->|Function Call| service
+    service -->|Function Call| domain
+    domain -->|Function Call| adapter
+    domain -->|Function Call| core
+    adapter -->|SQL| database
+
+    %% Link styles
+    linkStyle 0 stroke:#333,stroke-width:2px;
+    linkStyle 1 stroke:#0066cc,stroke-width:2px;
+    linkStyle 2 stroke:#ffcc00,stroke-width:2px;
+    linkStyle 3 stroke:#ffcc00,stroke-width:2px;
+    linkStyle 4 stroke:#ffcc00,stroke-width:2px;
+    linkStyle 5 stroke:#ffcc00,stroke-width:2px;
+    linkStyle 6 stroke:#339933,stroke-width:2px;

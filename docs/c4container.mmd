@@ -1,20 +1,35 @@
-C4Container
-    title Container Diagram for Chat Service API
+flowchart TB
+    %% Title
+    title["Container Diagram for Chat Service API"]
 
-    Person(user, "User", "A user of the chat service")
+    %% Define styles
+    classDef person fill:#ffdddd,stroke:#333,stroke-width:2px;
+    classDef database fill:#ddeeff,stroke:#333,stroke-width:2px,stroke-dasharray: 5;
+    classDef container fill:#ddffdd,stroke:#333,stroke-width:2px;
+    classDef boundary stroke:#999,stroke-width:2px,stroke-dasharray: 3;
 
-    ContainerDb(database, "Database", "PostgreSQL", "Stores chat data")
+    %% Define elements
+    user["User\n\nA user of the chat service"]:::person
+    database["Database\n\nPostgreSQL\nStores chat data"]:::database
 
-    System_Boundary(c1, "Application") {
-        System_Boundary(c2, "Front End") {
-            Container(web_app, "Web Application", "Front End Page", "Provides chat interface")
-            Container(mobile_app, "Mobile Application", "Front End Page", "Provides chat interface")
-        }
-        Container(api_service, "API Application", "FastAPI", "Handles chat operations")
-    }
+    subgraph Application_Boundary["Application"]
+        subgraph Front_End["Front End"]
+            web_app["Web Application\n\nFront End Page\nProvides chat interface"]:::container
+            mobile_app["Mobile Application\n\nFront End Page\nProvides chat interface"]:::container
+        end
+        api_service["API Application\n\nFastAPI\nHandles chat operations"]:::container
+    end
 
-    Rel(user, web_app, "Uses", "Browser")
-    Rel(user, mobile_app, "Uses", "Phone")
-    Rel(web_app, api_service, "Make api call", "HTTP and WebSockets")
-    Rel(mobile_app, api_service, "Make api call", "HTTP and WebSockets")
-    Rel(api_service, database, "Reads from and writes to", "SQL")
+    %% Define relationships
+    user -->|Browser| web_app
+    user -->|Phone| mobile_app
+    web_app -->|HTTP & WebSockets| api_service
+    mobile_app -->|HTTP & WebSockets| api_service
+    api_service -->|SQL| database
+
+    %% Link styles
+    linkStyle 0 stroke:#333,stroke-width:2px;
+    linkStyle 1 stroke:#333,stroke-width:2px;
+    linkStyle 2 stroke:#0066cc,stroke-width:2px;
+    linkStyle 3 stroke:#0066cc,stroke-width:2px;
+    linkStyle 4 stroke:#339933,stroke-width:2p
