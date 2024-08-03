@@ -119,6 +119,9 @@ async def health_check():
     let roomPassword;
 
     function connectWebSocket() {{
+        if (ws) {{
+            ws.close();
+        }}
         roomId = document.getElementById('roomInput').value;
         roomPassword = document.getElementById('roomPassword').value;
         if (!roomId) {{
