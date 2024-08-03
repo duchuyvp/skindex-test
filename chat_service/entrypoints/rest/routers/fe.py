@@ -175,17 +175,18 @@ async def health_check():
     }}
 
     function createRoom() {{
-        const createRoomPassword = document.getElementById('createRoomPassword').value;
+        const createRoomPassword = document.getElementById('createRoomPassword');
         fetch('{http_url}/rooms', {{
             method: 'POST',
             headers: {{
                 'Content-Type': 'application/json'
             }},
-            body: JSON.stringify({{ password: createRoomPassword }})
+            body: JSON.stringify({{ password: createRoomPassword.value }})
         }})
         .then(response => response.json())
         .then(data => {{
             alert(`Room created with ID: ${{data.id}}`);
+            createRoomPassword.value = '';
         }})
         .catch(error => console.error("Error creating room:", error));
     }}

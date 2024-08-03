@@ -1,3 +1,4 @@
+import asyncio
 import fastapi
 
 from chat_service.domains import commands
@@ -27,5 +28,6 @@ async def websocket_endpoint(websocket: fastapi.WebSocket, room_id: str, passwor
             bus.handle(cmd)
             message = views.get_message(cmd._id, bus.uow)
             await manager.broadcast(room_id, message.json)
+            await asyncio.sleep(0.01)
     except fastapi.WebSocketDisconnect:
         manager.disconnect(websocket, room_id)
