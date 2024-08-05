@@ -17,24 +17,36 @@ flowchart TB
             web_app["Web Application\n\nFront End Page\nProvides chat interface"]:::container
             mobile_app["Mobile Application\n\nFront End Page\nProvides chat interface"]:::container
         end
-        api_service["API Application\n\nFastAPI\nHandles chat operations"]:::container
-        subgraph Core["Core"]
-            core_factory["Factory\n\nCreates core components"]:::container
-            core_repository["Repository\n\nHandles database operations"]:::container
-        end
-        subgraph Chat_Service["Chat Service"]
-            chat_controller["Controller\n\nHandles HTTP requests and responses"]:::container
-            chat_service["Service\n\nHandles business logic"]:::container
+        subgraph FastAPI_Service["FastAPI Service"]
+            api_service["Entrypoint\n\nAPI Gateway\nHandles HTTP requests"]:::container
+            message_bus["Message Bus\n\nStores event and command"]:::container
+            subgraph Core["Core"]
+                core_factory["Factory\n\nCreates core components"]:::container
+                core_repository["Repository\n\nHandles database operations"]:::container
+            end
+            subgraph Chat_Service["Chat Service"]
+                domains["Domains\n\nContains domain model"]:::container
+                subgraph Adapter["Adapter"]
+                    redis["Redis\n\nHandles caching"]:::container
+                    sqlalchemy["SQLAlchemy\n\nORM for database"]:::container
+                end
+                service["Service\n\nHandles business logic"]:::container
+            end
         end
     end
     
+ 
     %% Define relationships
     user -->|Browser| web_app
     user -->|Phone| mobile_app
     web_app -->|HTTP| api_service
     mobile_app -->|HTTP| api_service
-    api_service -->|Routes to| chat_controller
-    chat_controller -->|Invokes| chat_service
+    api_service -->|Routes to| message_bus
+
+    message_bus -->|Publishes to| service
+    service -->|Uses| core_factory
+    service -->|Uses| core_repository
+    service -->|Uses| domains
+    service -->|Uses| redis
+    core_repository -->|Uses| sqlalchemy
     core_repository -->|Reads from and writes to| database
-    chat_service -->|Uses| core_factory
-    chat_service -->|Uses| core_repository
