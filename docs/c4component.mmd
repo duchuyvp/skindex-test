@@ -19,14 +19,12 @@ flowchart TB
         end
         api_service["API Application\n\nFastAPI\nHandles chat operations"]:::container
         subgraph Core["Core"]
-            core_session["Session\n\nManages database sessions"]:::container
             core_factory["Factory\n\nCreates core components"]:::container
             core_repository["Repository\n\nHandles database operations"]:::container
         end
         subgraph Chat_Service["Chat Service"]
             chat_controller["Controller\n\nHandles HTTP requests and responses"]:::container
             chat_service["Service\n\nHandles business logic"]:::container
-            chat_repository["Repository\n\nHandles database operations"]:::container
         end
     end
     
@@ -37,8 +35,6 @@ flowchart TB
     mobile_app -->|HTTP| api_service
     api_service -->|Routes to| chat_controller
     chat_controller -->|Invokes| chat_service
-    chat_service -->|Uses| chat_repository
-    chat_repository -->|Reads from and writes to| database
-    chat_service -->|Uses| core_session
+    core_repository -->|Reads from and writes to| database
     chat_service -->|Uses| core_factory
     chat_service -->|Uses| core_repository
