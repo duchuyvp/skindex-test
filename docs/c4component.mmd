@@ -24,14 +24,12 @@ flowchart TB
                 core_factory["Factory\n\nCreates core components"]:::container
                 core_repository["Repository\n\nHandles database operations"]:::container
             end
-            subgraph Chat_Service["Chat Service"]
-                domains["Domains\n\nContains domain model"]:::container
-                subgraph Adapter["Adapter"]
-                    redis["Redis\n\nHandles caching"]:::container
-                    sqlalchemy["SQLAlchemy\n\nORM for database"]:::container
-                end
-                service["Service\n\nHandles business logic"]:::container
+            domains["Domains\n\nContains domain model"]:::container
+            subgraph Adapter["Adapter"]
+                redis["Redis\n\nHandles caching"]:::container
+                sqlalchemy["SQLAlchemy\n\nORM for database"]:::container
             end
+            service["Service\n\nHandles business logic"]:::container
         end
     end
     
@@ -47,6 +45,7 @@ flowchart TB
     service -->|Uses| core_factory
     service -->|Uses| core_repository
     service -->|Uses| domains
+    domains -->|publish events| message_bus
     service -->|Uses| redis
     core_repository -->|Uses| sqlalchemy
-    core_repository -->|Reads from and writes to| database
+    sqlalchemy -->|Reads from and writes to| database
